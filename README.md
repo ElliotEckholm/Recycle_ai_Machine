@@ -1,5 +1,8 @@
 # Control LED's with TensorFlow Lite (Custom Model) Image Classifiction Predictions on the Raspberry Pi 4
 
+<img align="center" src="https://github.com/ElliotEckholm/Recycle_ai_Machine/blob/master/machine_demo.gif" width="300">
+
+
 ## Tutorial (First Half Copied from the TensorFlow Lite Tutorial):
 This example uses [TensorFlow Lite](https://tensorflow.org/lite) with Python
 on a Raspberry Pi to perform real-time image classification using images
