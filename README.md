@@ -1,4 +1,4 @@
-# Control LED's with TensorFlow Lite Image Classifiction Predictions on the Raspberry Pi 4
+# Control LED's with TensorFlow Lite (Custom Model) Image Classifiction Predictions on the Raspberry Pi 4
 
 ## From TensorFlow Tutorial:
 This example uses [TensorFlow Lite](https://tensorflow.org/lite) with Python
