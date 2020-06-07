@@ -56,7 +56,7 @@ cd examples/lite/examples/image_classification/raspberry_pi
 bash download.sh /tmp
 ```
 
-## Run the example
+## Run the Example Model
 
 ```
 python3 classify_picamera.py \
@@ -71,6 +71,25 @@ to perform each inference in milliseconds.
 
 For more information about executing inferences with TensorFlow Lite, read
 [TensorFlow Lite inference](https://www.tensorflow.org/lite/guide/inference).
+
+## Setup your Custom Model
+
+Train your custom TensorFlow model on your computer (not the raspberry pi), then convert the TensorFlow Model to a Quantized TF Lite Model. The Quantized uses 8 bits instead of Floating Point, so there is increased Inference Performance at the cost of a slight decrease in accuracy. 
+
+Then copy your .tflite file and label.txt file onto your raspberry pi form your computer, for example:
+
+```
+scp ./detect.tflite pi@raspberrypi.local:/home/pi/examples/lite/examples/image_classification/raspberry_pi/recyle_ai_model_v1
+scp ./detect.tflite pi@raspberrypi.local:/home/pi/examples/lite/examples/image_classification/raspberry_pi/recyle_ai_model_v1
+```
+
+Then on your Raspberry Pi, run the command with your new custom model:
+
+```
+python3 classify_picamera.py   
+--model ./recyle_ai_model_v1/detect.tflite   
+--labels ./recyle_ai_model_v1/labelmap.txt
+```
 
 
 ## Control LEDs
