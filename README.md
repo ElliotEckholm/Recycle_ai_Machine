@@ -1,5 +1,6 @@
-# TensorFlow Lite Python classification example with Pi Camera
+# Control LED's with TensorFlow Lite Image Classifiction Predictions on the Raspberry Pi 4
 
+## From TensorFlow Tutorial:
 This example uses [TensorFlow Lite](https://tensorflow.org/lite) with Python
 on a Raspberry Pi to perform real-time image classification using images
 streamed from the Pi Camera.
@@ -55,7 +56,6 @@ cd examples/lite/examples/image_classification/raspberry_pi
 bash download.sh /tmp
 ```
 
-
 ## Run the example
 
 ```
@@ -73,67 +73,34 @@ For more information about executing inferences with TensorFlow Lite, read
 [TensorFlow Lite inference](https://www.tensorflow.org/lite/guide/inference).
 
 
-## Speed up the inferencing time (optional)
+## Control LEDs
 
-If you want to significantly speed up the inference time, you can attach an
-ML accelerator such as the [Coral USB Accelerator](
-https://coral.withgoogle.com/products/accelerator)—a USB accessory that adds
-the [Edge TPU ML accelerator](https://coral.withgoogle.com/docs/edgetpu/faq/)
-to any Linux-based system.
-
-If you have a Coral USB Accelerator, follow these additional steps to
-delegate model execution to the Edge TPU processor:
-
-1.  First, be sure you have completed the [USB Accelerator setup instructions](
-    https://coral.withgoogle.com/docs/accelerator/get-started/#set-up-on-linux-or-raspberry-pi).
-
-2.  Now open the `classify_picamera.py` file and add the following import at
-    the top:
-
-    ```
-    from tflite_runtime.interpreter import load_delegate
-    ```
-
-    And then find the line that initializes the `Interpreter`, which looks like
-    this:
-
-    ```
-    interpreter = Interpreter(args.model)
-    ```
-
-    And change it to specify the Edge TPU delegate:
-
-    ```
-    interpreter = Interpreter(args.model,
-        experimental_delegates=[load_delegate('libedgetpu.so.1.0')])
-    ```
-
-    The `libedgetpu.so.1.0` file is provided by the Edge TPU library you
-    installed during the USB Accelerator setup in step 1.
-
-3.  Finally, you need a version of the model that's compiled for the Edge TPU.
-
-    Normally, you need to use use the [Edge TPU Compiler](
-    https://coral.withgoogle.com/docs/edgetpu/compiler/) to compile your
-    `.tflite` file. But the compiler tool isn't compatible with Raspberry
-    Pi, so we included a pre-compiled version of the model in the `download.sh`
-    script above.
-
-    So you already have the compiled model you need:
-    `mobilenet_v1_1.0_224_quant_edgetpu.tflite`.
-
-Now you're ready to execute the TensorFlow Lite model on the Edge TPU. Just run
-`classify_picamera.py` again, but be sure you specify the model that's compiled
-for the Edge TPU (it uses the same labels file as before):
-
+1. Import GPIO Library into classify_picamera.py file
+2. Inside the try: 
+``` with picamera.PiCamera(resolution=(640, 480), framerate=30) as camera:
+    camera.start_preview()
+    try:
 ```
-python3 classify_picamera.py \
-  --model /tmp/mobilenet_v1_1.0_224_quant_edgetpu.tflite \
-  --labels /tmp/labels_mobilenet_quant_v1_224.txt
+Place your GPIO setup and control:
+```
+ #Setup LED pin
+ GPIO.setmode(GPIO.BCM)
+ GPIO.setwarnings(False)
+ GPIO.setup(18,GPIO.OUT) #trash, metal
+```
+```
+results = classify_image(interpreter, image)
+elapsed_ms = (time.time() - start_time) * 1000
+label_id, prob = results[0]
+print(labels[label_id])
+#plastic or glass prediction
+if (label_id == 3 or label_id == 5 ):
+   print("LED on")
+   GPIO.output(18,GPIO.HIGH)
+else:
+   print("LED off")
+   GPIO.output(18,GPIO.LOW)        
 ```
 
-You should see significantly faster inference speeds.
-
-For more information about creating and running TensorFlow Lite models with
-Coral devices, read [TensorFlow models on the Edge TPU](
-https://coral.withgoogle.com/docs/edgetpu/models-intro/).
+   
+    
