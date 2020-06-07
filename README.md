@@ -1,6 +1,6 @@
 # Control LED's with TensorFlow Lite (Custom Model) Image Classifiction Predictions on the Raspberry Pi 4
 
-## From TensorFlow Tutorial:
+## Tutorial (First Half Copied from the TensorFlow Lite Tutorial):
 This example uses [TensorFlow Lite](https://tensorflow.org/lite) with Python
 on a Raspberry Pi to perform real-time image classification using images
 streamed from the Pi Camera.
@@ -76,7 +76,9 @@ For more information about executing inferences with TensorFlow Lite, read
 
 Train your custom TensorFlow model on your computer (not the raspberry pi), then convert the TensorFlow Model to a Quantized TF Lite Model. The Quantized uses 8 bits instead of Floating Point, so there is increased Inference Performance at the cost of a slight decrease in accuracy. 
 
-Then copy your .tflite file and label.txt file onto your raspberry pi form your computer, for example:
+And easy way to train and convert a Quantized TF Lite Model is using the Teachable Machine by Google: https://teachablemachine.withgoogle.com
+
+Copy your .tflite file and label.txt file onto your raspberry pi form your computer, for example:
 
 ```
 scp ./detect.tflite pi@raspberrypi.local:/home/pi/examples/lite/examples/image_classification/raspberry_pi/recyle_ai_model_v1
@@ -95,12 +97,12 @@ python3 classify_picamera.py
 ## Control LEDs
 
 1. Import GPIO Library into classify_picamera.py file
-2. Inside the try: 
+2. Take a look inside the try (in classify_picamera.py): 
 ``` with picamera.PiCamera(resolution=(640, 480), framerate=30) as camera:
     camera.start_preview()
     try:
 ```
-Place your GPIO setup and control:
+Within this try block, place your GPIO setup and control:
 ```
  #Setup LED pin
  GPIO.setmode(GPIO.BCM)
